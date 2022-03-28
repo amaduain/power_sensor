@@ -30,7 +30,8 @@ if client.connect ():
            # data = [0x01, 0x42, 0x80, 0x11]
            # print(client.send(data))
             #time.sleep(2)
-            data = client.read_input_registers (0x0000, 10, unit = 0x01)
+            result = client.read_input_registers (0x0000, 10, unit = 0x01)
+            data = result.registers
             voltage = data[0] / 10.0 # [V]
             current = (data[1] + (data[2] << 16)) / 1000.0 # [A]
             power = (data[3] + (data[4] << 16)) / 10.0 # [W]
