@@ -23,7 +23,7 @@ def create_logger(log_file_name):
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     log_handler = RotatingFileHandler(log_file_name, maxBytes=20000000,
                                       backupCount=5)
-    log_level = logging.INFO
+    log_level = logging.DEBUG
     log_handler.setFormatter(formatter)
     logger.setLevel(log_level)
     # Enable the screen logging.
