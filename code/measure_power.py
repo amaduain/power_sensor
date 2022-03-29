@@ -100,6 +100,7 @@ if __name__ == '__main__':
                                             "frequency": frequency,
                                             "powerFactor": powerFactor
                                         }
+                                    }
                                 ]
                     db_client.write_points(json_body)
                     logger.debug(f"DB Object: {json_body}")
