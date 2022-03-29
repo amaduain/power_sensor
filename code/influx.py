@@ -1,6 +1,6 @@
 from datetime import datetime
 from influxdb import InfluxDBClient
-dbname = "power"
+db_name = "power"
 
 
 
@@ -15,4 +15,9 @@ def create_db(client,db_name):
 
 
 
-client = InfluxDBClient(host='localhost', port=8086,database='dbname')
+from datetime import datetime
+from influxdb import InfluxDBClient
+db_name = "power"
+query = 'select *  from ev_power;'
+client = InfluxDBClient(host='localhost', port=8086,database=db_name)
+client.query(query)
