@@ -112,8 +112,8 @@ if __name__ == '__main__':
                     logger.debug(f'Power factor []: {powerFactor}')
                     logger.debug(f'Alarm : {alarm}')
                     #Set a read per minute for now
-                    sleeptime = 60 - datetime.utcnow().second
-#                    sleeptime = 10
+                    #sleeptime = 60 - datetime.utcnow().second
+                    sleeptime = 10
                     time.sleep(sleeptime)
                     #time.sleep(1)
                     #print(result.registers)
