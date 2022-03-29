@@ -5,6 +5,7 @@ import time
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import date, datetime
+import pytz
 from pymodbus.pdu import ModbusRequest
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pymodbus.transaction import ModbusRtuFramer
@@ -75,7 +76,7 @@ if __name__ == '__main__':
                 # data = [0x01, 0x42, 0x80, 0x11]
                 # print(client.send(data))
                     #time.sleep(2)
-                    timestamp = datetime.now()
+                    timestamp = datetime.utcnow().replace(tzinfo=pytz.utc)
                     result = usb_client.read_input_registers (0x0000, 10, unit = 0x01)
                     data = result.registers
                     voltage = data[0] / 10.0 # [V]
