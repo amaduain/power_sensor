@@ -15,7 +15,8 @@ import random
 
 ##GLOBAL VARIABLES####
 
-db_name = "power"
+power_db_name = "power"
+sessions_db_name = "sessions"
 usb_port = "/dev/ttyUSB0"
 log_level = logging.DEBUG
 
@@ -82,14 +83,17 @@ def format_duration(hours, minutes, seconds):
     duration = duration + str(seconds) + "s"
     return duration
 
+
+
 if __name__ == '__main__':
     logger, log_handler = create_logger("./log/power.log",log_level)
     logger.info("Starting power measurements...")
     logger.debug("Creating USB connection client.")
     usb_client = ModbusClient (method = "rtu", port=usb_port, stopbits = 1, bytesize = 8, parity = 'N', baudrate = 9600)
     logger.debug("Configuring DB")
-    create_db(db_name)
-    db_client = InfluxDBClient(host='localhost', port=8086,database=db_name)
+    create_db(power_db_name)
+    create_db(sessions_db_name)
+    power_db_client = InfluxDBClient(host='localhost', port=8086,database=power_db_name)
 #Connect to the serial modbus server
 #connection = client.connect()
     logger.debug("Starting infinite loop")
@@ -133,7 +137,7 @@ if __name__ == '__main__':
                                         }
                                     }
                                 ]
-                    db_client.write_points(json_body)
+                    power_db_client.write_points(json_body)
                     if not in_session:
                         if power > 10:
                             in_session = True
@@ -144,20 +148,45 @@ if __name__ == '__main__':
                             in_session = False
                             logger.info(f"Charging session ended at: {timestamp.isoformat()}")
                             end_timestamp = datetime.utcnow().replace(tzinfo=pytz.utc)
-                            session_start_date = timestamp.strftime("%m/%d/%Y")
-                            session_start_time = timestamp.strftime("%I:%M:%S %p")
+                            session["start_time"]
+                            session_start_date = session["start_time"].strftime("%m/%d/%Y")
+                            session_start_time = session["start_time"].strftime("%I:%M:%S %p")
                             session_end_time = end_timestamp.strftime("%I:%M:%S %p")
                             session_energy = session["total_energy"] + energy - session["start_energy"]
                             session_delta = end_timestamp - timestamp
                             hours, remainder = divmod(session_delta.seconds, 3600)
                             minutes, seconds = divmod(remainder, 60)
                             session_duration = format_duration(hours, minutes, seconds)
+                            session_id = random_string(24)
                             logger.info(f"Session start date: {session_start_date}")
                             logger.info(f"Session start time: {session_start_time}")
                             logger.info(f"Session end time: {session_end_time}")
                             logger.info(f"Energy: {session_energy}")
                             logger.info(f"Duration: {session_duration}")
-                            
+                            logger.info(f"Session Id: {session_id}")
+                            session_json_body = [
+                                    {
+                                        "measurement": "ev_session",
+                                        "tags": {
+                                            "user": "Alex"
+                                        },
+                                        "time": session["start_time"].isoformat(),
+                                        "fields": {
+                                            "start_date": session_start_date,
+                                            "start_time": session_start_time,
+                                            "end_time": session_end_time,
+                                            "energy": session_energy,
+                                            "duration": session_duration,
+                                            "session_id": session_id
+                                        }
+                                    }
+                                ]
+                            sessions_db_client = InfluxDBClient(host='localhost', port=8086,database=sessions_db_name)
+                            sessions_db_client.write_points(session_json_body)
+                            sessions_db_client.close()
+                            session={}
+                            logger.info("Session Added successfully.")
+
                     logger.debug(f"DB Object: {json_body}")
                     logger.debug(f'Voltage [V]: {voltage}')
                     logger.debug(f'Current [A]: {current}')
