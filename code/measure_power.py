@@ -10,7 +10,8 @@ from pymodbus.pdu import ModbusRequest
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pymodbus.transaction import ModbusRtuFramer
 from influxdb import InfluxDBClient
-
+import string
+import random
 
 ##GLOBAL VARIABLES####
 
@@ -20,6 +21,17 @@ log_level = logging.DEBUG
 
 
 #### FUNCTIONS #####
+
+def random_string(length):
+    return ('S01' + ''.join(random.choice(string.ascii_letters) for m in range(length))).upper()
+
+def start_session(current_energy, timestamp):
+    session = {}
+    session["start_energy"] = current_energy
+    session["start_time"] = timestamp
+    session["total_energy"] = 0
+    return session
+
 
 def create_db(db_name):
     client = InfluxDBClient(host='localhost', port=8086)
@@ -51,7 +63,24 @@ def create_logger(log_file_name, log_level):
     logger.addHandler(console)
     return logger, log_handler
 
+def reset_energy(usb_client):
+    data = [0x01, 0x42, 0x80, 0x11]
+    usb_client.send(data)
+    time.sleep(1)
 
+def format_duration(hours, minutes, seconds):
+    duration = ""
+    if hours > 0:
+        duration = str(hours) + "h"
+    if len(duration) > 0:
+           duration = duration + " " + str(minutes) + "m"
+    else:
+        if minutes > 0:
+           duration = str(minutes) + "m"
+    if len(duration) > 0:
+        duration = duration + " "
+    duration = duration + str(seconds) + "s"
+    return duration
 
 if __name__ == '__main__':
     logger, log_handler = create_logger("./log/power.log",log_level)
@@ -64,6 +93,7 @@ if __name__ == '__main__':
 #Connect to the serial modbus server
 #connection = client.connect()
     logger.debug("Starting infinite loop")
+    in_session = False
     try: 
         while True:
             if usb_client.connect():
@@ -104,6 +134,30 @@ if __name__ == '__main__':
                                     }
                                 ]
                     db_client.write_points(json_body)
+                    if not in_session:
+                        if power > 10:
+                            in_session = True
+                            session = start_session(energy, timestamp)
+                            logger.info(f"Charging session started at: {timestamp.isoformat()}")
+                    if in_session:
+                        if power < 10:
+                            in_session = False
+                            logger.info(f"Charging session ended at: {timestamp.isoformat()}")
+                            end_timestamp = datetime.utcnow().replace(tzinfo=pytz.utc)
+                            session_start_date = timestamp.strftime("%m/%d/%Y")
+                            session_start_time = timestamp.strftime("%I:%M:%S %p")
+                            session_end_time = end_timestamp.strftime("%I:%M:%S %p")
+                            session_energy = session["total_energy"] + energy - session["start_energy"]
+                            session_delta = end_timestamp - timestamp
+                            hours, remainder = divmod(session_delta.seconds, 3600)
+                            minutes, seconds = divmod(remainder, 60)
+                            session_duration = format_duration(hours, minutes, seconds)
+                            logger.info(f"Session start date: {session_start_date}")
+                            logger.info(f"Session start time: {session_start_time}")
+                            logger.info(f"Session end time: {session_end_time}")
+                            logger.info(f"Energy: {session_energy}")
+                            logger.info(f"Duration: {session_duration}")
+                            
                     logger.debug(f"DB Object: {json_body}")
                     logger.debug(f'Voltage [V]: {voltage}')
                     logger.debug(f'Current [A]: {current}')
