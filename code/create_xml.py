@@ -29,7 +29,7 @@ def create_logger(log_level):
     console.setLevel(log_level)
     console.setFormatter(formatter)
     logger.addHandler(console)
-    return logger, log_handler
+    return logger, console
 
 
 def last_day_of_month(any_day):
