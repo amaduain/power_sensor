@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 sessions_db_name = "sessions"
 log_level = logging.INFO
 template_file = "template.xml"
+output_file = "output.xml"
 
 def create_logger(log_level):
     """
@@ -53,6 +54,7 @@ if __name__ == '__main__':
     templateLoader = jinja2.FileSystemLoader(searchpath="./")
     templateEnv = jinja2.Environment(loader=templateLoader)
     template = templateEnv.get_template(template_file)
+    open(output_file, 'w').close()
     for sessions in result:
         for session in sessions:
             logger.info(f"Session ID: {session['session_id']}")
@@ -71,5 +73,5 @@ if __name__ == '__main__':
                                          duration=session['duration'],
                                          price="{:.2f}".format(price)
                                         )
-            with open("output.xml", "w") as output_file:
+            with open(output_file, "a") as output_file:
                 output_file.write(outputText)
