@@ -1,0 +1,65 @@
+<tr class="wb-row" style="grid-template-columns: max-content max-content max-content max-content max-content max-content max-content;" data-test-id="15833-1648628410" data-v-3088fa8c="" data-v-1fa21772="" data-v-02408f30-s="" data-v-3745df5a-s="">
+    <!---->
+    <td data-test-id="sessionId" class="wallbox-row-item-wrapper left" style="width: 110px; min-width: 110px;" data-v-130a5554="" data-v-1fa21772="" data-v-3088fa8c-s="">
+        <div class="wallbox-row-item" data-v-130a5554="">#{{id}}</div>
+    </td>
+    <td data-test-id="sessionStart" class="wallbox-row-item-wrapper left" style="width: 150px; min-width: 150px;" data-v-130a5554="" data-v-1fa21772="" data-v-3088fa8c-s="">
+        <div class="wallbox-row-item multiline" data-v-130a5554="">
+            <div data-test-id="date" class="has-text-grey-700 is-font-weight-700" data-v-1fa21772="" data-v-130a5554-s="">
+                <span class="wb-icons data-row-icon" data-v-1fa21772="" data-v-130a5554-s=""> calendar </span>
+                <span data-v-1fa21772="" data-v-130a5554-s="">{{session_date}}</span>
+            </div>
+            <div data-test-id="time" data-v-1fa21772="" data-v-130a5554-s="">{{start_time}} - {{end_time}}</div>
+        </div>
+    </td>
+    <td data-test-id="wb-table-row-item" class="wallbox-row-item-wrapper left" style="width: 200px; min-width: 200px;" data-v-130a5554="" data-v-1fa21772="" data-v-3088fa8c-s="">
+        <div class="wallbox-row-item" data-v-130a5554="">
+            <div class="is-flex has-align-items" data-v-1fa21772="" data-v-130a5554-s="">
+                <div class="avatar is-small is-circle is-margin-right-8 avatar" data-test-id="userPicture" data-v-9c52c146="" data-v-1fa21772="" data-v-130a5554-s="">
+                    <p class="initials" data-v-9c52c146="">AM</p>
+                </div>
+                <div class="has-text-overflow" data-v-1fa21772="" data-v-130a5554-s="">
+                    <p class="has-text-grey-700 is-font-weight-700" data-test-id="userName" data-v-1fa21772="" data-v-130a5554-s="">Alejandro Madurga</p>
+                    <p data-test-id="userEmail" data-v-1fa21772="" data-v-130a5554-s="">amaduain@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td data-test-id="wb-table-row-item" class="wallbox-row-item-wrapper left" style="width: 150px; min-width: 150px;" data-v-130a5554="" data-v-1fa21772="" data-v-3088fa8c-s="">
+        <div class="wallbox-row-item multiline" data-v-130a5554="">
+            <a href="/chargers/15833" class="link has-text-black has-text-grey-700 is-font-weight-700" data-test-id="charger" data-v-bed94388="" data-v-1fa21772="" data-v-130a5554-s="">Pulsar SN 15833</a>
+            <div class="has-text-overflow" data-test-id="location" data-v-1fa21772="" data-v-130a5554-s="">
+                <span class="wb-icons data-row-icon" data-v-1fa21772="" data-v-130a5554-s=""> location </span>
+                <span data-v-1fa21772="" data-v-130a5554-s="">Family</span>
+            </div>
+        </div>
+    </td>
+    <td data-test-id="wb-table-row-item" class="wallbox-row-item-wrapper left" style="width: 150px; min-width: 150px;" data-v-130a5554="" data-v-1fa21772="" data-v-3088fa8c-s="">
+        <div class="wallbox-row-item multiline" data-v-130a5554="">
+            <div data-v-1fa21772="" data-v-130a5554-s="">
+                <span data-test-id="sessionEnergy" data-v-1fa21772="" data-v-130a5554-s="">
+                    <span class="wb-icons data-row-icon" data-v-1fa21772="" data-v-130a5554-s=""> bolt </span>
+                    <span data-v-1fa21772="" data-v-130a5554-s="">{{energy}} kWh</span>
+                </span>
+                <!---->
+            </div>
+            <div data-test-id="timeDuration" data-v-1fa21772="" data-v-130a5554-s="">
+                <span class="wb-icons data-row-icon" data-v-1fa21772="" data-v-130a5554-s=""> timelapse </span>
+                <span data-v-1fa21772="" data-v-130a5554-s="">{{duration}}</span>
+            </div>
+        </div>
+    </td>
+    <td data-test-id="sessionType" class="wallbox-row-item-wrapper left" style="width: 175px; min-width: 175px;" data-v-130a5554="" data-v-1fa21772="" data-v-3088fa8c-s="">
+        <div class="wallbox-row-item multiline" data-v-130a5554="">
+            <div class="types" data-v-1fa21772="" data-v-130a5554-s="">
+                <!---->
+                <div class="filter-item color-success active disabled label" data-v-d0cb1f80="" data-v-1fa21772="" data-v-130a5554-s="">
+                    <!---->Free</div>
+            </div>
+        </div>
+    </td>
+    <td data-test-id="energyCost" class="wallbox-row-item-wrapper left" style="width: 100px; min-width: 100px;" data-v-130a5554="" data-v-1fa21772="" data-v-3088fa8c-s="">
+        <div class="wallbox-row-item multiline" data-v-130a5554="">€1.95</div>
+    </td>
+    <!---->
+</tr>
