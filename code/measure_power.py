@@ -18,7 +18,7 @@ import random
 power_db_name = "power"
 sessions_db_name = "sessions"
 usb_port = "/dev/ttyUSB0"
-log_level = logging.DEBUG
+log_level = logging.INFO
 
 
 #### FUNCTIONS #####
@@ -61,7 +61,7 @@ def create_logger(log_file_name, log_level):
     logger.addHandler(log_handler)
     console = logging.StreamHandler()
     console.setLevel(log_level)
-    logger.addHandler(console)
+    #logger.addHandler(console)
     return logger, log_handler
 
 def reset_energy(usb_client):

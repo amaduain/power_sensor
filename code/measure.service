@@ -1,0 +1,14 @@
+[Unit]
+Description=Power Measurement Daemon
+After=multi-user.target
+Conflicts=getty@tty1.service
+
+[Service]
+User=pi
+Type=simple
+WorkingDirectory=/home/pi/power_sensor/code
+ExecStart=/usr/bin/python3 /home/pi/power_sensor/code/measure_power.py
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target
