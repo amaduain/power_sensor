@@ -1,9 +1,11 @@
+from calendar import c
 import logging
 import pytz
 import jinja2
 from datetime import datetime, timedelta
 from influxdb import InfluxDBClient
 from dateutil.relativedelta import relativedelta
+import sys
 
 
 ##GLOBAL VARIABLES####
@@ -37,11 +39,20 @@ def create_logger(log_level):
 if __name__ == '__main__':
     logger = create_logger(log_level)
     logger.info("Starting XML Creation...")
+    cmd_args = sys.argv[1:]
+    month_offset = 0
+    if len(cmd_args) > 0:
+        logger.info(f"Month offset provided: {cmd_args[0]}")
+        if cmd_args[0].isdigit:
+            month_offset = int(cmd_args[0]) * -1
+            
     query = 'select *  from ev_sessions;'
     # Using the actual month for now....
     timestamp = datetime.utcnow().replace(tzinfo=pytz.utc)
     cet_date = timestamp.astimezone(pytz.timezone('Europe/Madrid'))
     month_start = cet_date.replace(day=1,hour=0,minute=0,second=0,microsecond=0)
+    month_start = month_start + relativedelta(months=month_offset)
+    logger.info(f"Processing Month: {month_start.strftime('%B %Y')}")
     month_end = month_start + relativedelta(months=1)
     month_end = month_end + relativedelta(seconds=-1)
     logger.info(f"First day of month: {month_start}")
