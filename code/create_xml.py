@@ -71,8 +71,5 @@ if __name__ == '__main__':
                                          duration=session['duration'],
                                          price="{:.2f}".format(price)
                                         )
-            print(outputText)
-
-        
-
-
+            with open("output.xml", "w") as output_file:
+                output_file.write(outputText)
