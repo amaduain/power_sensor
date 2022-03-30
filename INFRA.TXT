@@ -32,3 +32,8 @@ sudo /bin/systemctl start grafana-server
 http://<ip address>:3000
 admin
 admin
+
+
+session_delta = end_timestamp - timestamp
+hours, remainder = divmod(session_delta.seconds, 3600)
+minutes, seconds = divmod(remainder, 60

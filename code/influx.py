@@ -19,5 +19,6 @@ from datetime import datetime
 from influxdb import InfluxDBClient
 db_name = "power"
 query = 'select *  from ev_power;'
+qyery = "SELECT mean(\"current\") FROM \"ev_power\" WHERE (\"user\" = 'Alex') AND time >= now() - 6h and time <= now() GROUP BY time(1m) fill(null)"
 client = InfluxDBClient(host='localhost', port=8086,database=db_name)
 client.query(query)

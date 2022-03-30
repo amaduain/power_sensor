@@ -98,6 +98,9 @@ if __name__ == '__main__':
 #connection = client.connect()
     logger.debug("Starting infinite loop")
     in_session = False
+    timestamp = datetime.utcnow().replace(tzinfo=pytz.utc)
+    cet_date = timestamp.astimezone(pytz.timezone('Europe/Madrid'))
+    working_day = cet_date.day
     try: 
         while True:
             if usb_client.connect():
@@ -111,6 +114,7 @@ if __name__ == '__main__':
                 # print(client.send(data))
                     #time.sleep(2)
                     timestamp = datetime.utcnow().replace(tzinfo=pytz.utc)
+                    cet_date = timestamp.astimezone(pytz.timezone('Europe/Madrid'))
                     result = usb_client.read_input_registers (0x0000, 10, unit = 0x01)
                     data = result.registers
                     voltage = data[0] / 10.0 # [V]
@@ -120,6 +124,13 @@ if __name__ == '__main__':
                     frequency = data[7] / 10.0 # [Hz]
                     powerFactor = data[8] / 100.0
                     alarm = data[9] # 0 = no alarm
+                    if working_day != cet_date.day:
+                        #Reseting counter
+                        logger.info("Resesting day Energy counter.")
+                        if in_session:
+                            session["total_energy"] = energy - session["start_energy"]
+                        reset_energy(usb_client)
+                        working_day = cet_date.day
                     json_body = [
                                     {
                                         "measurement": "ev_power",
@@ -148,12 +159,13 @@ if __name__ == '__main__':
                             in_session = False
                             logger.info(f"Charging session ended at: {timestamp.isoformat()}")
                             end_timestamp = datetime.utcnow().replace(tzinfo=pytz.utc)
-                            session["start_time"]
-                            session_start_date = session["start_time"].strftime("%m/%d/%Y")
-                            session_start_time = session["start_time"].strftime("%I:%M:%S %p")
-                            session_end_time = end_timestamp.strftime("%I:%M:%S %p")
+                            cet_start_date = session["start_time"].astimezone(pytz.timezone('Europe/Madrid'))
+                            cet_end_date = end_timestamp.astimezone(pytz.timezone('Europe/Madrid'))
+                            session_start_date = cet_start_date.strftime("%m/%d/%Y")
+                            session_start_time = cet_start_date.strftime("%I:%M:%S %p")
+                            session_end_time = cet_end_date.strftime("%I:%M:%S %p")
                             session_energy = session["total_energy"] + energy - session["start_energy"]
-                            session_delta = end_timestamp - timestamp
+                            session_delta = end_timestamp - session["start_time"]
                             hours, remainder = divmod(session_delta.seconds, 3600)
                             minutes, seconds = divmod(remainder, 60)
                             session_duration = format_duration(hours, minutes, seconds)
