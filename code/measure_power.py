@@ -39,7 +39,7 @@ def create_db(db_name):
     db_list = client.get_list_database()
     for db in db_list:
         if db['name'] == db_name:
-            print(f"Database {db_name} already exists, skipping creation")
+            logger.debug(f"Database {db_name} already exists, skipping creation")
             return
     client.create_database(db_name)
 
