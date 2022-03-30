@@ -59,7 +59,7 @@
         </div>
     </td>
     <td data-test-id="energyCost" class="wallbox-row-item-wrapper left" style="width: 100px; min-width: 100px;" data-v-130a5554="" data-v-1fa21772="" data-v-3088fa8c-s="">
-        <div class="wallbox-row-item multiline" data-v-130a5554="">€1.95</div>
+        <div class="wallbox-row-item multiline" data-v-130a5554="">€{{price}}</div>
     </td>
     <!---->
 </tr>
