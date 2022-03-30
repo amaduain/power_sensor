@@ -69,7 +69,7 @@ if __name__ == '__main__':
                                          end_time=session['end_time'],
                                          energy=energy,
                                          duration=session['duration'],
-                                         price=price
+                                         price="{:.2f}".format(price)
                                         )
             print(outputText)
 
