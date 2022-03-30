@@ -220,7 +220,7 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         logger.info("Power measurement finished.")
     finally:
-        db_client.close()
+        power_db_client.close()
         usb_client.close()
 
 
