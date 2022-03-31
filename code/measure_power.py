@@ -129,6 +129,7 @@ if __name__ == '__main__':
                         logger.info("Resesting day Energy counter.")
                         if in_session:
                             session["total_energy"] = energy - session["start_energy"]
+                            session["start_energy"] = 0
                         reset_energy(usb_client)
                         working_day = cet_date.day
                     json_body = [
