@@ -1,0 +1,21 @@
+<html>
+    <header>
+        <title>Power Meter Wifi</title>
+            <link rel="stylesheet" href={{ url_for('static', filename='css/style.css') }}>
+        <script src="/static/js/main.js"></script> 
+    </header>
+    <body>
+        <form action="/restart" method="post" class="login-form">
+            <h1>Power Meter</h1>
+                <h2>Wifi configuration</h2>
+                <h3>Power meter has been successfully configured</h3>
+                <h3>with IP: {{ip}}</h3>
+                <h3>Press the button to confirm</h3>
+                <h2>Reporting page will be available in the url</h2>
+                <h2>HTTP://{{ip}}:3000</h2>
+                <br>
+                <br>
+                <button id="textboxidgreen" type="submit" class="btn btn-primary btn-ghost">OK</button>
+            </form>
+    </body>
+</html>

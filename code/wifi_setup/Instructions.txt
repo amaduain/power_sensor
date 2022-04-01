@@ -1,0 +1,38 @@
+https://pypi.org/project/wifiConfig/
+
+File paths:
+/etc/dhcpcd.conf
+/etc/dnsmasq.conf
+/etc/hostapd/hostapd.conf
+/etc/default/hostapd
+
+
+Instructions: --> https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install hostapd
+sudo apt-get install dnsmasq
+sudo systemctl stop hostapd
+sudo systemctl stop dnsmasq
+sudo systemctl disable hostapd
+sudo systemctl disable dnsmasq
+
+
+Edit Files
+
+Control will be done via python script :-D 
+
+On boot:
+start wifi python script
+Check the connectivity
+IF no connectivity
+    Start wifi AP services
+    Start Page to connect wifi
+    When user connects wifi:
+    Restart
+    SHOW IP
+
+
+Setup /etc/hosts hosts:
+power.power.local

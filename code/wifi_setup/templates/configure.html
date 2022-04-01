@@ -1,0 +1,30 @@
+<html>
+    <header>
+        <title>Power Meter Wifi</title>
+            <link rel="stylesheet" href={{ url_for('static', filename='css/style.css') }}>
+        <script src="/static/js/main.js"></script> 
+    </header>
+    <body>
+        <form action="/" method="post" class="login-form">
+            <h1>Power Meter</h1>
+                <h2>Wifi configuration</h2>
+            <div class="form-input-material">
+                <label for="ssid">SSID</label>
+                <input type="text" name="ssid" id="ssid" placeholder=" " autocomplete="off" class="form-control-material" required />
+                </div>
+            <div class="form-input-material">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder=" " autocomplete="off" class="form-control-material" required />
+                </div>
+                <br>
+                <br>
+                <button id="textboxidgreen" type="submit" class="btn btn-primary btn-ghost">Login</button>
+                <br>
+                {% if error %}
+                <h2>
+                    <mark class="red">UNABLE TO CONFIGURE WIFI WITH THE LAST CONFIGURATION</mark>  
+                </h2>
+                {% endif %}
+            </form>
+    </body>
+</html>
