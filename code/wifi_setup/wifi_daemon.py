@@ -11,8 +11,6 @@ import json
 import sys
 import time
 import signal
-from wifi import Cell,Scheme
-
 
 ##############################
 #        GLOBAL VARS         #
