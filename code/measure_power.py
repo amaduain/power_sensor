@@ -19,6 +19,7 @@ power_db_name = "power"
 sessions_db_name = "sessions"
 usb_port = "/dev/ttyUSB0"
 log_level = logging.INFO
+interval = 10 #Seconds
 
 
 #### FUNCTIONS #####
@@ -102,6 +103,9 @@ if __name__ == '__main__':
     timestamp = datetime.utcnow().replace(tzinfo=pytz.utc)
     cet_date = timestamp.astimezone(pytz.timezone('Europe/Madrid'))
     working_day = cet_date.day
+    sleeptime = 60 - datetime.utcnow().second
+    #Sync the time to start at 0s
+    time.sleep(sleeptime)
     try: 
         while True:
             if usb_client.connect():
@@ -234,8 +238,7 @@ if __name__ == '__main__':
                     logger.debug(f'Alarm : {alarm}')
                     #Set a read per minute for now
                     #sleeptime = 60 - datetime.utcnow().second
-                    sleeptime = 10
-                    time.sleep(sleeptime)
+                    time.sleep(interval)
                     #time.sleep(1)
                     #print(result.registers)
                     #print (calc (result.registers[5:7], 1) + 'Wh')
