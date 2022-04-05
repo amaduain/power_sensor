@@ -31,6 +31,7 @@ def start_session(current_energy, timestamp):
     session["start_energy"] = current_energy
     session["start_time"] = timestamp
     session["total_energy"] = 0
+    session["session_id"] = random_string(24)
     return session
 
 
@@ -155,6 +156,30 @@ if __name__ == '__main__':
                             in_session = True
                             session = start_session(energy, timestamp)
                             logger.info(f"Charging session started at: {timestamp.isoformat()}")
+                            cet_start_date = session["start_time"].astimezone(pytz.timezone('Europe/Madrid'))
+                            session_start_date = cet_start_date.strftime("%m/%d/%Y")
+                            session_start_time = cet_start_date.strftime("%I:%M:%S %p")
+                            session_id  = session["session_id"]
+                            logger.info(f"Session start date: {session_start_date}")
+                            logger.info(f"Session start time: {session_start_time}")
+                            logger.info(f"Session Id: {session_id}")
+                            session_json_body = [
+                                    {
+                                        "measurement": "ev_session",
+                                        "tags": {
+                                            "user": "Alex"
+                                        },
+                                        "time": session["start_time"].isoformat(),
+                                        "fields": {
+                                            "start_date": session_start_date,
+                                            "start_time": session_start_time,
+                                            "session_id": session_id
+                                        }
+                                    }
+                                ]
+                            sessions_db_client = InfluxDBClient(host='localhost', port=8086,database=sessions_db_name)
+                            sessions_db_client.write_points(session_json_body)
+                            sessions_db_client.close()
                     if in_session:
                         if power < 10:
                             in_session = False
@@ -167,10 +192,10 @@ if __name__ == '__main__':
                             session_end_time = cet_end_date.strftime("%I:%M:%S %p")
                             session_energy = session["total_energy"] + energy - session["start_energy"]
                             session_delta = end_timestamp - session["start_time"]
+                            session_id  = session["session_id"]
                             hours, remainder = divmod(session_delta.seconds, 3600)
                             minutes, seconds = divmod(remainder, 60)
                             session_duration = format_duration(hours, minutes, seconds)
-                            session_id = random_string(24)
                             logger.info(f"Session start date: {session_start_date}")
                             logger.info(f"Session start time: {session_start_time}")
                             logger.info(f"Session end time: {session_end_time}")
@@ -199,7 +224,6 @@ if __name__ == '__main__':
                             sessions_db_client.close()
                             session={}
                             logger.info("Session Added successfully.")
-
                     logger.debug(f"DB Object: {json_body}")
                     logger.debug(f'Voltage [V]: {voltage}')
                     logger.debug(f'Current [A]: {current}')
